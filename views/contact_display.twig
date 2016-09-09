@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
+        <meta charset='utf-8'>
+        <title>Contact</title>
+    </head>
+    <body>
+        <div class='container'>
+        <ul class='list-group'>
+            {% for contact in contacts %}
+                <li>{{ contact.get_name }}</li>
+            {% endfor %}
+        </ul>
+        </div>
+        <div>
+
+        </div>
+    </body>
+</html>
+
+
+<!-- if ($cars_matching_search) {
+    foreach ($cars_matching_search as $car) {
+        $car_list = $car_list .
+        "<li class='list-group-item'> " . $car->get_make() . " </li>" .
+        "<ul class='list-group'>" .
+            "<li class='list-group-item'> $" . $car->get_price() . " </li>" .
+            "<li class='list-group-item'> Miles: " . $car->get_miles() . " </li>" .
+            "<li class='list-group-item'><img src='" . $car->get_image() . "'></img></li>";
+    }
+} else {
+    $car_list = "<h1>You are a choosy bastard. Ease up and try again.</h1>";
+} -->
