@@ -3,30 +3,33 @@
     require_once __DIR__."/../vendor/autoload.php";
     require_once __DIR__."/../src/contact.php";
 
-    session_start();
-
-    if (empty($_SESSION['list_of_contacts'])) {
-        $_SESSION['list_of_contacts'] = array();
-        $contact1 = new Contact('name', 'address', 'phone');
-
-        $_SESSION['list_of_contacts'] = array($contact1);
-    }
-
     $app = new Silex\Application();
 
-    $app->register(new Silex\Provider\TwigServiceProvider(), array ('twig.path' => __DIR__.'/../views'));
+    session_start();
 
-    $app->get("/", function() use ($app) {
+    if (empty($_SESSION['contacts'])) {
+    $_SESSION['contacts'] = array();
+    }
 
-        return $app['twig']->render('contact_signup.html.twig', array('contacts' => $_SESSION['list_of_contacts']));
+    $app->register(new Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__.'/../views'));
 
+    $app->get('/', function() use ($app){
+
+      return $app['twig']->render('contact.html.twig', array('contacts' => $_SESSION['contacts']));
     });
 
-    $app->post("/results", function() use ($app) {
+    $app->post('/postcontact', function() use ($app) {
+        $name = $_POST['name'];
+        $address = $_POST['address'];
+        $phone = $_POST['phone'];
+        $new_contact = new Contact($name, $address, $phone);
+        array_push($_SESSION['contacts'], $new_contact);
+        return $app->redirect('/');
+    });
 
-        Car::loopContacts();
-        return $app['twig']->render('contact_display.html.twig', array('contacts' => $contacts_matching_search));
-
+    $app->get('/delete_contacts', function() use ($app){
+        Contact::clear();
+        return $app->redirect('/');
     });
 
     return $app;
